@@ -1,7 +1,8 @@
 /** @odoo-module **/
 
 import { registry } from "@web/core/registry";
-const { Component, mount, xml, reactive, useState, useRef, useEnv, useSubEnv, onMounted, onWillStart } = owl;
+import { useService } from "@web/core/utils/hooks";
+const { Component, reactive, useState, useRef, useEnv, useSubEnv, onMounted, onWillStart } = owl;
 
 // --------------------------------------------------------------------------
 // Store
@@ -29,8 +30,8 @@ function useStore() {
     const newEnv = {
         ...initEnv,
         store: createTaskStore(),
-    }
-    useSubEnv(newEnv) // Share this env with child components
+    };
+    useSubEnv(newEnv); // Share this env with child components
     return useState(newEnv.store);
 }
 
@@ -44,11 +45,11 @@ class TaskList {
         // than just using the length) to account for deleted tasks.
         this.nextId = taskIds.length ? Math.max(...taskIds) + 1 : 1;
         this.filter = "all";
+        this.orm = useService("orm");
     }
 
     get displayedTasks() {
         const tasks = this.tasks;
-        console.log("dt", tasks)
         switch(this.filter) {
             case "all": return tasks;
             case "active": return tasks.filter(t => !t.isCompleted);
@@ -56,24 +57,48 @@ class TaskList {
         }
     }
 
-    addTask(text) {
+    async fetchTasks() {
+        this.tasks = await this.orm.searchRead("owl_todo", [], ["name", "color", "completed"])
+        this.tasks = this.tasks.map(t => {
+            console.log(t, `name: ${t.name} id: ${t.id}`)
+            return {
+                id: t.id,
+                text: t.name,
+                isCompleted: t.completed,
+                color: t.color
+            };
+        });
+        const taskIds = this.tasks.map(t => t.ids);
+        this.nextId = taskIds.length ? Math.max(...taskIds) + 1 : 1;
+    }
+
+    async addTask(text) {
         text = text.trim();
         if (!text) return;
 
         const newTask = {
-            id: this.nextId++,
             text: text,
             isCompleted: false,
         };
         this.tasks.push(newTask);
+
+        await this.orm.create("owl_todo", [newTask].map(t => {
+            return {
+                name: t.text,
+                completed: t.isCompleted,
+            };
+        }));
+        this.fetchTasks();
     }
 
-    toggleTask(task) {
+    async toggleTask(task) {
+        await this.orm.write("owl_todo", [task.id], {completed: !task.isCompleted});
         task.isCompleted = !task.isCompleted;
     }
 
     deleteTask(task) {
         const index = this.tasks.findIndex(t => t.id === task.id);
+        this.orm.unlink("owl_todo", [task.id]);
         this.tasks.splice(index, 1);
     }
 
@@ -84,21 +109,8 @@ class TaskList {
 
 // Function: createTaskStore
 function createTaskStore() {
-    async function fetchTasks() {
-        const tasks = await this.orm.searchRead("owl_todo", [], ["name", "color", "completed"])
-        // for (let t of tasks)
-        //     this.store.addTask(t);
-    }
-
-    function saveTasks() {
-        // localStorage.setItem("owl-todoapp", JSON.stringify(taskStore.tasks));
-        console.log("Saving tasks... :)")
-    }
-
-    // const initialTasks = JSON.parse(localStorage.getItem("owl-todoapp") || "[]");
-    // const initialTasks = fetchTasks()
-    const taskStore = reactive(new TaskList(initialTasks), saveTasks);
-    saveTasks(); // Initial observation
+    const initialTasks = [];
+    const taskStore = reactive(new TaskList(initialTasks));
     return taskStore;
 }
 
@@ -120,7 +132,7 @@ class Task extends Component {
         this.store = useStore();
     }
 }
-Task.props = ["task"]
+Task.props = ["task"];
 Task.template = "owl_todo.Task";
 
 
@@ -137,8 +149,8 @@ class InputField extends Component {
         }
     }
 }
-InputField.props = ["inputName", "handleKeypress", "isFocused"]
-InputField.template = "owl_todo.InputField"
+InputField.props = ["inputName", "handleKeypress", "isFocused"];
+InputField.template = "owl_todo.InputField";
 
 
 // Component: TaskPanel
@@ -150,7 +162,7 @@ class TaskPanel extends Component {
         });
     }
 }
-TaskPanel.template = "owl_todo.TaskPanel"
+TaskPanel.template = "owl_todo.TaskPanel";
 
 
 // --------------------------------------------------------------------------
@@ -170,7 +182,7 @@ export class Root extends Component {
         this.store = useStore();
 
         onWillStart(async () => {
-            await this.fetchTasks();
+            await this.store.fetchTasks();
         });
     }
         
