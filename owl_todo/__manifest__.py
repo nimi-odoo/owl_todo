@@ -13,10 +13,11 @@
     'application': True,
     'category': 'OWL',
     'version': '0.1',
-    'depends': ['base'],
+    'depends': ['base', 'web'],
     'data': [
         'security/ir.model.access.csv',
-        'views/todo_list.xml'
+        'views/todo_list.xml',
+        'views/res_partner.xml'
     ],
     'assets': {
         'web.assets_backend': [
