@@ -2,27 +2,36 @@ odoo.define("owlguy.PartnerDetailsEdit", function(require) {
     'use strict';
     const Registries = require('point_of_sale.Registries');
     const PartnerDetailsEdit = require('point_of_sale.PartnerDetailsEdit');
-    const { useState } = owl;
-    console.log("PartnerDetailsEdit", PartnerDetailsEdit)
-
+    const { onWillStart } = owl;
+    
     const PartnerDetailsEditInherit = (PartnerDetailsEdit) => class extends PartnerDetailsEdit {
         setup() {
-            this.state = useState({
-                customerType: "None",
-            })
-            this.changes = {
-                ...this.changes,
-                'customer_type': this.state.customerType,
-            }
+            super.setup();
+            const partner = this.props.partner;
+
             this.customerTypes = [
-                "Consumer",
-                "Patient",
-                "Caregiver",
-                "External Patient",
+                ["consumer", "Consumer"],
+                ["patient", "Patient"],
+                ["caregiver", "Caregiver"],
+                ["external_patient", "External Patient"],
             ]
-            super.setup(...arguments)
+
+            onWillStart(async () => {
+                await this.refreshCustomerTypeOfPartner(partner);
+            })
+        }
+        async refreshCustomerTypeOfPartner(partner) {
+            console.log("env", this)
+            const partnerWithUpdatedCustomerType = await this.rpc({
+                model: 'res.partner',
+                method: 'search_read',
+                fields: ['customer_type'],
+                domain: [['id', '=', partner.id]],
+            });
+            this.customerType = partnerWithUpdatedCustomerType[0]?.customer_type
+            return partnerWithUpdatedCustomerType;
         }
     }
     Registries.Component.extend(PartnerDetailsEdit, PartnerDetailsEditInherit);
-    return PartnerDetailsEdit;
+    return PartnerDetailsEditInherit;
 });
