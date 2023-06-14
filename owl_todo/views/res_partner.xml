@@ -40,14 +40,6 @@
             <xpath expr="//field[@name='vat']" position="after">
                 <field name="customer_type"/>
             </xpath>
-            <xpath expr="//form" position="attributes">
-                <attribute name="js_class">res_partner_pos_inherit_form_view</attribute>
-            </xpath>
-
-
-            <!-- <xpath expr="//form//field[@name='category_id']" position="attributes"> -->
-                <!-- <attribute name="js_class">res_partner_pos_inherit_form_view</attribute> -->
-            <!-- </xpath> -->
         </field>
     </record>
 </data>
