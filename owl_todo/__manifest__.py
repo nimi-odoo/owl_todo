@@ -13,7 +13,7 @@
     'application': True,
     'category': 'OWL',
     'version': '0.1',
-    'depends': ['base', 'web'],
+    'depends': ['base', 'web', 'point_of_sale'],
     'data': [
         'security/ir.model.access.csv',
         'views/todo_list.xml',
@@ -25,5 +25,10 @@
             'owl_todo/static/src/components/*/*.xml',
             'owl_todo/static/src/components/*/*.scss'
         ],
+        'point_of_sale.assets': [
+            'owl_todo/static/src/pos_components/*/*.js',
+            'owl_todo/static/src/pos_components/*/*.xml',
+            'owl_todo/static/src/pos_components/*/*.scss'
+        ]
     },
 }

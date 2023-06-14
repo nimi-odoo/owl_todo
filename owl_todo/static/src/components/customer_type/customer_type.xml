@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<templates>
+    <t t-name="owl.ResPartnerPOSFormView" t-inherit="web.FormView" owl="1">
+        <!-- <xpath expr="//t[contains(@t-component, 'props.Renderer')]" position="before"> -->
+        <xpath expr="//Layout" position="inside">
+            <h2>yo</h2>
+        </xpath>
+        <!-- <xpath expr="//field[@name='vat']" position="after">
+        </xpath> -->
+        <!-- <xpath expr="//button[hasclass('o_form_button_create')]" position="after"></xpath> -->
+    </t>
+</templates>

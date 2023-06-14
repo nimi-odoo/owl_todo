@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<templates>
+    <t t-name="PDI" t-inherit="point_of_sale.PartnerDetailsEdit" t-inherit-mode="extension" owl="1">
+        <xpath expr="//div[hasclass('partner-details-right')]" position="inside">
+            <p>blah</p>
+            <p t-esc="state.customerType"/>
+             <div class="partner-detail">
+                <span class="label">Customer Type</span>
+                <select class="detail" name="customer_type" t-on-change="captureChange">
+                    <option value="">None</option>
+                    <t t-foreach="customerTypes" t-as="c" t-key="c">
+                        <option t-att-value="c">
+                            <t t-esc="c"/>
+                        </option>
+                    </t>
+                </select>
+            </div>
+        </xpath>
+    </t>
+</templates>
