@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<templates>
+    <t t-name="pos_products_code" t-inherit="point_of_sale.ProductItem" t-inherit-mode="extension" owl="1">
+        <xpath expr="//div[@t-attf-id='article_product_{{props.product.id}}']" position="attributes">
+            <attribute name="style" position="add">display: flex; flex-direction: column; row-gap: .5rem;</attribute>
+        </xpath>
+        <xpath expr="//div[@t-attf-id='article_product_{{props.product.id}}']" position="inside">
+            <span><t t-esc="props.product.default_code" /></span>
+        </xpath>
+    </t>
+</templates>
