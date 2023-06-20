@@ -10,7 +10,7 @@
                 <field name="has_bank_account" invisible="0"/>
             </field>
             <xpath expr="//group[@name='request_main']" position="inside">
-                <field name="bank_account"/>
+                <field name="bank_account" attrs="{'invisible':[('has_bank_account','==','no')], 'required': [('has_bank_account','==','required')]}"/>
             </xpath>
         </field>
     </record>

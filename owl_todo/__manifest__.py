@@ -19,6 +19,7 @@
         'views/todo_list.xml',
         'views/res_partner.xml',
         'views/hr_employee_views.xml',
+        'views/approval_category_views.xml',
         'views/approval_request_views.xml'
     ],
     'assets': {
