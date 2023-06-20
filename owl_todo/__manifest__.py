@@ -17,7 +17,9 @@
     'data': [
         'security/ir.model.access.csv',
         'views/todo_list.xml',
-        'views/res_partner.xml'
+        'views/res_partner.xml',
+        'views/hr_employee_views.xml',
+        'views/approval_request_views.xml'
     ],
     'assets': {
         'web.assets_backend': [
