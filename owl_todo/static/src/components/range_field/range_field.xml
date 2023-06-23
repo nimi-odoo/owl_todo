@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<templates>
+    <t t-name="owl.RangeField" owl="1">
+        <div>
+            <label for="customRange1" class="form-label d-inline-flex justify-content-between w-100">
+                <input class="o_input" t-att-value="props.value" t-on-change="e => this.props.update(e.target.value)"/>
+                <span t-esc="currency"/>
+            </label>
+            <input type="range" t-att-value="this.props.value" class="form-range" id="customRange1" min="10000" max="100000" step="1000" t-on-change="(e) => this.props.update(e.target.value)"/>
+        </div>
+    </t>
+</templates>
