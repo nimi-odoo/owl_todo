@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<odoo>
+<data>
+    <template id="website_address_inherit" inherit_id="website_sale.address">
+        <xpath expr="//input[@name='street']/.." position="before">
+            <span>hello world</span>
+            <div t-attf-class="mb-3 #{error.get('mobile') and 'o_has_error' or ''} col-lg-6" id="div_mobile">
+                <label class="col-form-label" for="mobile">Mobile</label>
+                <input type="tel" name="mobile" t-attf-class="form-control #{error.get('mobile') and 'is-invalid' or ''}" t-att-value="'mobile' in checkout and checkout['mobile']" />
+            </div>
+            <div t-attf-class="mb-3 #{error.get('date_of_bith') and 'o_has_error' or ''} col-lg-6" id="div_dob">
+                <label class="col-form-label" for="dob">Date of Birth</label>
+                <input type="date" class="form-control" name="dob" t-attf-class="form-control #{error.get('date_of_birth') and 'is-invalid' or ''}" t-att-value="'date_of_birth' in checkout and checkout['date_of_birth']"/>
+            </div>
+            <div t-attf-class="mb-3 #{error.get('id_number') and 'o_has_error' or ''} col-lg-6" id="div_id_number">
+                <label class="col-form-label" for="id-number">ID Number</label>
+                <input type="text" name="id-number" t-attf-class="form-control #{error.get('id_number') and 'is-invalid' or ''}" t-att-value="'id_number' in checkout and checkout['id_number']" />
+            </div>
+            <div t-attf-class="mb-3 #{error.get('barrio') and 'o_has_error' or ''} col-lg-6" id="div_barrio">
+                <label class="col-form-label" for="barrio">Barrio</label>
+                <input type="text" name="barrio" t-attf-class="form-control #{error.get('barrio') and 'is-invalid' or ''}" t-att-value="'barrio' in checkout and checkout['barrio']" />
+            </div>
+            <div t-attf-class="mb-3 #{error.get('country_id') and 'o_has_error' or ''} col-lg-6 div_country">
+                <label class="col-form-label" for="country_id">Gender</label>
+                <select id="gender" name="gender" t-attf-class="form-select #{error.get('gender') and 'is-invalid' or ''}" t-att-mode="mode[1]">
+                    <option value="">Gender...</option>
+                        <t t-foreach="['Hombre', 'Mujer']" t-as="g">
+                            <option t-att-value="g" t-att-selected="g == gender">
+                                <t t-esc="g" />
+                            </option>
+                        </t>
+                </select>
+            </div>
+        </xpath>
+
+        <!-- Zip Code Fields -->
+        <xpath expr="//t[contains(@t-if, '&lt;')]/div" position="attributes">
+            <attribute name="t-attf-class">d-none</attribute>
+        </xpath>
+        <xpath expr="//t[contains(@t-if, '&gt;')]/div" position="attributes">
+            <attribute name="t-attf-class">d-none</attribute>
+        </xpath>
+
+        <!-- Country Code -->
+        <xpath expr="//option[@t-att-value='c.id']" position="attributes">
+            <attribute name="t-att-selected">c.name == 'Paraguay' and 'selected'</attribute>
+        </xpath> 
+        <!-- <xpath expr="//div[contains(@t-attf-class, 'div_country')]" position="attributes">
+            <attribute name="t-attf-class">d-none</attribute>
+        </xpath> WHY DOESN'T THIS WORK? w/e --> 
+        <xpath expr="//select[@name='country_id']/.." position="attributes">
+            <attribute name="t-attf-class">d-none</attribute> 
+        </xpath>
+
+    </template>
+</data>
+</odoo>

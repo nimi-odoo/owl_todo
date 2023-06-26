@@ -32,6 +32,7 @@
         </field>
     </record>
     <!-- Customer Type - POS -->
+    <!-- Field Widget Inherit -->
     <record id="res_partner_pos_inherit_form" model="ir.ui.view">
         <field name="name">res.partner.pos.inherit.form</field>
         <field name="model">res.partner</field>
