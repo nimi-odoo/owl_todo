@@ -16,10 +16,6 @@
                 <label class="col-form-label" for="id-number">ID Number</label>
                 <input type="text" name="id-number" t-attf-class="form-control #{error.get('id_number') and 'is-invalid' or ''}" t-att-value="'id_number' in checkout and checkout['id_number']" />
             </div>
-            <div t-attf-class="mb-3 #{error.get('barrio') and 'o_has_error' or ''} col-lg-6" id="div_barrio">
-                <label class="col-form-label" for="barrio">Barrio</label>
-                <input type="text" name="barrio" t-attf-class="form-control #{error.get('barrio') and 'is-invalid' or ''}" t-att-value="'barrio' in checkout and checkout['barrio']" />
-            </div>
             <div t-attf-class="mb-3 #{error.get('country_id') and 'o_has_error' or ''} col-lg-6 div_gender">
                 <label class="col-form-label" for="country_id">Gender</label>
                 <select id="gender" name="gender" t-attf-class="form-select #{error.get('gender') and 'is-invalid' or ''}" t-att-mode="mode[1]">
@@ -31,11 +27,19 @@
                         </t>
                 </select>
             </div>
+            <xpath expr="//div[contains(@t-attf-class, 'div_city')]" position="move"/>
+            <div t-attf-class="mb-3 #{error.get('barrio') and 'o_has_error' or ''} col-lg-6" id="div_barrio">
+                <label class="col-form-label" for="barrio">Barrio</label>
+                <input type="text" name="barrio" t-attf-class="form-control #{error.get('barrio') and 'is-invalid' or ''}" t-att-value="'barrio' in checkout and checkout['barrio']" />
+            </div>
         </xpath>
 
+        <!-- City field restyling -->
+        <xpath expr="//div[contains(@t-attf-class, 'div_city')]" position="attributes">
+            <attribute name="t-attf-class" separator=" " add="col-lg-6 col-md-6"/>
+        </xpath>
 
-
-        <!-- Zip Code Fields -->
+        <!-- Hide zip code fields -->
         <xpath expr="//t[contains(@t-if, '&lt;')]/div" position="attributes">
             <attribute name="t-attf-class">d-none</attribute>
         </xpath>
@@ -43,19 +47,13 @@
             <attribute name="t-attf-class">d-none</attribute>
         </xpath>
 
-        <!-- Country Code -->
+        <!-- Set country default and hide field -->
         <xpath expr="//option[@t-att-value='c.id']" position="attributes">
             <attribute name="t-att-selected">c.name == 'Paraguay' and 'selected'</attribute>
         </xpath> 
         <xpath expr="//div[contains(@t-attf-class, 'div_country')]" position="attributes">
             <attribute name="t-attf-class" separator=" " add="d-none" />
         </xpath>
-        <!-- <xpath expr="//select[@name='country_id']/.." position="attributes">
-            <attribute name="t-attf-class">d-none</attribute> 
-        </xpath> -->
-        <!-- <xpath expr='//div[@t-attf-class="mb-3 #{error.get(&#39;country_id&#39;) and &#39;o_has_error&#39; or &#39;&#39;} col-lg-6 div_country"]' position="attributes">
-            <attribute name="t-attf-class">d-none</attribute>
-        </xpath> -->
     </template>
 </data>
 </odoo>
